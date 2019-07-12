@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('GitignoreAPICli
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -45,6 +46,7 @@ export class GitignoreAPIClient implements GitignoreAPIClientInterface {
    * Listing available templates.
    * List all templates available to pass as an option when creating a repository.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGitignoreTemplates(
     args: {
@@ -58,7 +60,10 @@ export class GitignoreAPIClient implements GitignoreAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gitignore> {
     const path = `/gitignore/templates`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -83,6 +88,7 @@ export class GitignoreAPIClient implements GitignoreAPIClientInterface {
 
   /**
    * Get a single template.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGitignoreTemplatesLanguage(
     args: {
@@ -97,7 +103,10 @@ export class GitignoreAPIClient implements GitignoreAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.GitignoreLang> {
     const path = `/gitignore/templates/${args.language}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));

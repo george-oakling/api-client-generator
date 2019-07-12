@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('UsersAPIClient_
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -47,6 +48,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
    * Note: Pagination is powered exclusively by the since parameter. Use the Link
    * header to get the URL for the next page of users.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsers(
     args: {
@@ -61,7 +63,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Users> {
     const path = `/users`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('since' in args) {
       options.params = options.params.set('since', String(args.since));
@@ -89,6 +94,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
 
   /**
    * Get a single user.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsersUsername(
     args: {
@@ -103,7 +109,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Users> {
     const path = `/users/${args.username}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -128,6 +137,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
 
   /**
    * If you are authenticated as the given user, you will see your private events. Otherwise, you'll only see public events.
+   * Response generated for [ missing ] HTTP response code.
    */
   getUsersUsernameEvents(
     args: {
@@ -140,9 +150,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/events`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -162,11 +175,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * This is the user's organization dashboard. You must be authenticated as the user to view this.
+   * Response generated for [ missing ] HTTP response code.
    */
   getUsersUsernameEventsOrg(
     args: {
@@ -180,9 +194,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/events/orgs/${args.org}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -202,11 +219,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * List a user's followers
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsersUsernameFollowers(
     args: {
@@ -221,7 +239,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Users> {
     const path = `/users/${args.username}/followers`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -246,6 +267,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
 
   /**
    * Check if one user follows another.
+   * Response generated for [ 204 ] HTTP response code.
    */
   getUsersUsernameFollowingTargetUser(
     args: {
@@ -259,9 +281,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/following/${args.targetUser}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -281,11 +306,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * List a users gists.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsersUsernameGists(
     args: {
@@ -301,7 +327,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gists> {
     const path = `/users/${args.username}/gists`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('since' in args) {
       options.params = options.params.set('since', String(args.since));
@@ -331,6 +360,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
    * List public keys for a user.
    * Lists the verified public keys for a user. This is accessible by anyone.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsersUsernameKeys(
     args: {
@@ -345,7 +375,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gitignore> {
     const path = `/users/${args.username}/keys`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -370,6 +403,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
 
   /**
    * List all public organizations for a user.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsersUsernameOrgs(
     args: {
@@ -384,7 +418,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gitignore> {
     const path = `/users/${args.username}/orgs`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -409,6 +446,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
 
   /**
    * These are events that you'll only see public events.
+   * Response generated for [ missing ] HTTP response code.
    */
   getUsersUsernameReceivedEvents(
     args: {
@@ -421,9 +459,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/received_events`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -443,11 +484,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * List public events that a user has received
+   * Response generated for [ missing ] HTTP response code.
    */
   getUsersUsernameReceivedEventsPublic(
     args: {
@@ -460,9 +502,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/received_events/public`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -482,11 +527,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * List public repositories for the specified user.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getUsersUsernameRepos(
     args: {
@@ -502,7 +548,10 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Repos> {
     const path = `/users/${args.username}/repos`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('type' in args) {
       options.params = options.params.set('type', String(args.type));
@@ -530,6 +579,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
 
   /**
    * List repositories being starred by a user.
+   * Response generated for [ missing ] HTTP response code.
    */
   getUsersUsernameStarred(
     args: {
@@ -542,9 +592,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/starred`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -564,11 +617,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * List repositories being watched by a user.
+   * Response generated for [ missing ] HTTP response code.
    */
   getUsersUsernameSubscriptions(
     args: {
@@ -581,9 +635,12 @@ export class UsersAPIClient implements UsersAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.username}/subscriptions`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -603,7 +660,7 @@ export class UsersAPIClient implements UsersAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   private sendRequest<T>(method: string, path: string, options: HttpOptions, body?: any): Observable<T> {

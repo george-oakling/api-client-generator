@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('APIClient_USE_H
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -47,6 +48,7 @@ export class APIClient implements APIClientInterface {
    * 
    * Documents returned by this method are not guaranteed to be returned in the
    * same order that they were requested.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsBatchGet(
     args: {
@@ -69,7 +71,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.BatchGetDocumentsResponse> {
     const path = `/${args.database}/documents:batchGet`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -115,6 +120,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Starts a new transaction.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsBeginTransaction(
     args: {
@@ -137,7 +143,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.BeginTransactionResponse> {
     const path = `/${args.database}/documents:beginTransaction`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -183,6 +192,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Commits a transaction, while optionally updating documents.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsCommit(
     args: {
@@ -205,7 +215,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.CommitResponse> {
     const path = `/${args.database}/documents:commit`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -251,6 +264,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Listens to changes.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsListen(
     args: {
@@ -273,7 +287,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ListenResponse> {
     const path = `/${args.database}/documents:listen`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -319,6 +336,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Rolls back a transaction.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsRollback(
     args: {
@@ -341,7 +359,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Empty> {
     const path = `/${args.database}/documents:rollback`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -387,6 +408,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Streams batches of document updates and deletes, in order.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsWrite(
     args: {
@@ -409,7 +431,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.WriteResponse> {
     const path = `/${args.database}/documents:write`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -455,6 +480,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Deletes an index.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesIndexesDelete(
     args: {
@@ -478,7 +504,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Empty> {
     const path = `/${args.name}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -530,6 +559,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Gets an index.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesIndexesGet(
     args: {
@@ -554,7 +584,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Index> {
     const path = `/${args.name}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -611,6 +644,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Updates or inserts a document.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsPatch(
     args: {
@@ -637,7 +671,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Document> {
     const path = `/${args.name}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -699,6 +736,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Lists the indexes that match the specified filters.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesIndexesList(
     args: {
@@ -723,7 +761,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ListIndexesResponse> {
     const path = `/${args.parent}/indexes`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -792,6 +833,7 @@ export class APIClient implements APIClientInterface {
    * 
    * 
    * Indexes with a single field cannot be created.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesIndexesCreate(
     args: {
@@ -814,7 +856,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Operation> {
     const path = `/${args.parent}/indexes`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -860,6 +905,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Lists documents.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsList(
     args: {
@@ -889,7 +935,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ListDocumentsResponse> {
     const path = `/${args.parent}/${args.collectionId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -958,6 +1007,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Creates a new document.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsCreateDocument(
     args: {
@@ -983,7 +1033,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Document> {
     const path = `/${args.parent}/${args.collectionId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -1037,6 +1090,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Lists all the collection IDs underneath a document.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsListCollectionIds(
     args: {
@@ -1059,7 +1113,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ListCollectionIdsResponse> {
     const path = `/${args.parent}:listCollectionIds`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));
@@ -1105,6 +1162,7 @@ export class APIClient implements APIClientInterface {
 
   /**
    * Runs a query.
+   * Response generated for [ 200 ] HTTP response code.
    */
   firestoreProjectsDatabasesDocumentsRunQuery(
     args: {
@@ -1127,7 +1185,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.RunQueryResponse> {
     const path = `/${args.parent}:runQuery`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('$Xgafv' in args) {
       options.params = options.params.set('$.xgafv', String(args.$Xgafv));

@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('IssuesAPIClient
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -45,6 +46,7 @@ export class IssuesAPIClient implements IssuesAPIClientInterface {
    * List issues.
    * List all issues across all the authenticated user's visible repositories.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getIssues(
     args: {
@@ -64,7 +66,10 @@ export class IssuesAPIClient implements IssuesAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Issues> {
     const path = `/issues`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('filter' in args) {
       options.params = options.params.set('filter', String(args.filter));

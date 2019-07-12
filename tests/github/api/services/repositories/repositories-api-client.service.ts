@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('RepositoriesAPI
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -48,6 +49,7 @@ export class RepositoriesAPIClient implements RepositoriesAPIClientInterface {
    * Note: Pagination is powered exclusively by the since parameter. is the
    * Link header to get the URL for the next page of repositories.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getRepositories(
     args: {
@@ -62,7 +64,10 @@ export class RepositoriesAPIClient implements RepositoriesAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Repositories> {
     const path = `/repositories`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('since' in args) {
       options.params = options.params.set('since', String(args.since));

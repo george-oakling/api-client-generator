@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('LegacyAPIClient
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -43,6 +44,7 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
 
   /**
    * Find issues by state and keyword.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getLegacyIssuesSearchOwnerRepositoryStateKeyword(
     args: {
@@ -60,7 +62,10 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchIssuesByKeyword> {
     const path = `/legacy/issues/search/${args.owner}/${args.repository}/${args.state}/${args.keyword}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -85,6 +90,7 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
 
   /**
    * Find repositories by keyword. Note, this legacy method does not follow the v3 pagination pattern. This method returns up to 100 results per page and pages can be fetched using the start_page parameter.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getLegacyReposSearchKeyword(
     args: {
@@ -103,7 +109,10 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchRepositoriesByKeyword> {
     const path = `/legacy/repos/search/${args.keyword}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
@@ -140,6 +149,7 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
 
   /**
    * This API call is added for compatibility reasons only.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getLegacyUserEmail(
     args: {
@@ -154,7 +164,10 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchUserByEmail> {
     const path = `/legacy/user/email/${args.email}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -179,6 +192,7 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
 
   /**
    * Find users by keyword.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getLegacyUserSearchKeyword(
     args: {
@@ -196,7 +210,10 @@ export class LegacyAPIClient implements LegacyAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchUsersByKeyword> {
     const path = `/legacy/user/search/${args.keyword}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));

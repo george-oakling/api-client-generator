@@ -6,9 +6,11 @@
 [![Conventional Commits](https://user-images.githubusercontent.com/7274335/42030800-4690ea1e-7ad4-11e8-9e37-6fe8b2cb3801.png)](https://conventionalcommits.org)
 [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/api-client-gen)
 
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/flowup/api-client-generator.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/flowup/api-client-generator/alerts/)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/flowup/api-client-generator.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/flowup/api-client-generator/context:javascript)
+
 [![GitHub stars](https://img.shields.io/github/stars/flowup/api-client-generator.svg?style=social&label=Star)](https://github.com/flowup/api-client-generator)
 [![tweet](https://user-images.githubusercontent.com/7274335/42030803-46cd231c-7ad4-11e8-992c-2a5b933383c9.png)](https://twitter.com/intent/tweet?text=Tool%20that%20lets%20you%20generate%20API%20client%20from%20a%20swagger%20file&hashtags=angular,swagger,api,angular5&url=https://github.com/flowup/api-client-generator)
-
 
 # API client generator
 Angular REST API client generator from Swagger YAML or JSON file with camel case settings
@@ -37,9 +39,9 @@ A lot of developers is struggling with how to properly use the REST API in their
 
 # Compatibility
 
-- **Angular 6** (should also work with 5 and 4.3+)
+- **Angular 6+** (it should also work with 5 and 4.3+)
 - **RxJS 6** (Observable imports)
-  - in case of rxjs <6 please update or rewrite the rxjs import to match the older version
+  - in case of rxjs <6 please update or rewrite the rxjs imports to match the older version
 
 See the [Changelog](https://github.com/flowup/api-client-generator/blob/master/CHANGELOG.md) to keep up with the features and changes.
 
@@ -78,7 +80,7 @@ This command will generate API client described in the swagger.json file to the.
 | `-v`/`--verbose`       | supply stack traces with outputted error messages                                                               |
 | `-t`/`--splitPathTags` | generate services and models only for the specified tags. Use `,` as the separator for multiple tags            |
 |                        | use `all` to emit all as a service per tag                                                                      |
-| `-m`/`--skipModule`    | skip creating the index file with module export                                                                     |
+| `-m`/`--skipModule`    | skip creating the index file with module export                                                                 |
 
 <small>\* The author of the commit will be `api-client-generator <api-client-generator@flowup.cz>`.
 If there are any staged changes in your repository, the generator will halt pre-generation with an error to prevent including your changes in the automatic commit.*</small>
@@ -162,8 +164,25 @@ StaticInjectorError(AppModule)[APIClient -> HttpClient]:
     NullInjectorError: No provider for HttpClient!
 ```
 
-Fix:
+**Fix:**
  - add `HttpClientModule` to your root module (see NgModule imports in [usage](https://github.com/flowup/api-client-generator#how-to-use-generated-client))
+
+### Numeric Enums keys generated as plane number
+
+If some of your numeric enums look like this, the problem might be that in the swagger file you are not describing the keys properly.
+
+```
+export enum MyEnum {
+  0 = 0,
+  1 = 1,
+  2 = 2,
+}
+```
+
+**Fix**
+ We currently support two options:
+ - formatting description into array of `['1 Foo', '2 Bar']`
+ - using `'x-enumNames'` custom property that should be in format `['Foo', 'Bar']`
 
 # Problem reporting and contributions
 

@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('SearchAPIClient
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -43,6 +44,7 @@ export class SearchAPIClient implements SearchAPIClientInterface {
 
   /**
    * Search code.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getSearchCode(
     args: {
@@ -59,7 +61,10 @@ export class SearchAPIClient implements SearchAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchCode> {
     const path = `/search/code`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
@@ -93,6 +98,7 @@ export class SearchAPIClient implements SearchAPIClientInterface {
 
   /**
    * Find issues by state and keyword. (This method returns up to 100 results per page.)
+   * Response generated for [ 200 ] HTTP response code.
    */
   getSearchIssues(
     args: {
@@ -109,7 +115,10 @@ export class SearchAPIClient implements SearchAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchIssues> {
     const path = `/search/issues`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
@@ -143,6 +152,7 @@ export class SearchAPIClient implements SearchAPIClientInterface {
 
   /**
    * Search repositories.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getSearchRepositories(
     args: {
@@ -159,7 +169,10 @@ export class SearchAPIClient implements SearchAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchRepositories> {
     const path = `/search/repositories`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
@@ -193,6 +206,7 @@ export class SearchAPIClient implements SearchAPIClientInterface {
 
   /**
    * Search users.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getSearchUsers(
     args: {
@@ -209,7 +223,10 @@ export class SearchAPIClient implements SearchAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.SearchUsers> {
     const path = `/search/users`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));

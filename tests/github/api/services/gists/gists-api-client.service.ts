@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('GistsAPIClient_
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -45,6 +46,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
    * List the authenticated user's gists or if called anonymously, this will
    * return all public gists.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGists(
     args: {
@@ -59,7 +61,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gists> {
     const path = `/gists`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('since' in args) {
       options.params = options.params.set('since', String(args.since));
@@ -87,6 +92,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Create a gist.
+   * Response generated for [ 201 ] HTTP response code.
    */
   postGists(
     args: {
@@ -101,7 +107,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gist> {
     const path = `/gists`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -126,6 +135,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * List all public gists.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGistsPublic(
     args: {
@@ -140,7 +150,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gists> {
     const path = `/gists/public`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('since' in args) {
       options.params = options.params.set('since', String(args.since));
@@ -168,6 +181,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * List the authenticated user's starred gists.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGistsStarred(
     args: {
@@ -182,7 +196,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gists> {
     const path = `/gists/starred`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('since' in args) {
       options.params = options.params.set('since', String(args.since));
@@ -210,6 +227,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Delete a gist.
+   * Response generated for [ 204 ] HTTP response code.
    */
   deleteGistsId(
     args: {
@@ -222,9 +240,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/gists/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -244,11 +265,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * Get a single gist.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGistsId(
     args: {
@@ -263,7 +285,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gist> {
     const path = `/gists/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -288,6 +313,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Edit a gist.
+   * Response generated for [ 200 ] HTTP response code.
    */
   patchGistsId(
     args: {
@@ -303,7 +329,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Gist> {
     const path = `/gists/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -328,6 +357,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * List comments on a gist.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGistsIdComments(
     args: {
@@ -342,7 +372,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Comments> {
     const path = `/gists/${args.id}/comments`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -367,6 +400,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Create a commen
+   * Response generated for [ 201 ] HTTP response code.
    */
   postGistsIdComments(
     args: {
@@ -382,7 +416,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Comment> {
     const path = `/gists/${args.id}/comments`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -407,6 +444,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Delete a comment.
+   * Response generated for [ 204 ] HTTP response code.
    */
   deleteGistsIdCommentsCommentId(
     args: {
@@ -420,9 +458,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/gists/${args.id}/comments/${args.commentId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -442,11 +483,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * Get a single comment.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getGistsIdCommentsCommentId(
     args: {
@@ -462,7 +504,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Comment> {
     const path = `/gists/${args.id}/comments/${args.commentId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -487,6 +532,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Edit a comment.
+   * Response generated for [ 200 ] HTTP response code.
    */
   patchGistsIdCommentsCommentId(
     args: {
@@ -503,7 +549,10 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Comment> {
     const path = `/gists/${args.id}/comments/${args.commentId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -528,6 +577,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
 
   /**
    * Fork a gist.
+   * Response generated for [ 204 ] HTTP response code.
    */
   postGistsIdForks(
     args: {
@@ -540,9 +590,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/gists/${args.id}/forks`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -562,11 +615,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('POST', path, options);
+    return this.sendRequest<void>('POST', path, options);
   }
 
   /**
    * Unstar a gist.
+   * Response generated for [ 204 ] HTTP response code.
    */
   deleteGistsIdStar(
     args: {
@@ -579,9 +633,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/gists/${args.id}/star`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -601,11 +658,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * Check if a gist is starred.
+   * Response generated for [ 204 ] HTTP response code.
    */
   getGistsIdStar(
     args: {
@@ -618,9 +676,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/gists/${args.id}/star`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -640,11 +701,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * Star a gist.
+   * Response generated for [ 204 ] HTTP response code.
    */
   putGistsIdStar(
     args: {
@@ -657,9 +719,12 @@ export class GistsAPIClient implements GistsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/gists/${args.id}/star`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -679,7 +744,7 @@ export class GistsAPIClient implements GistsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('PUT', path, options);
+    return this.sendRequest<void>('PUT', path, options);
   }
 
   private sendRequest<T>(method: string, path: string, options: HttpOptions, body?: any): Observable<T> {

@@ -8,6 +8,7 @@ export interface MarkdownAPIClientInterface {
 
   /**
    * Render an arbitrary Markdown document
+   * Response generated for [ 200 ] HTTP response code.
    */
   postMarkdown(
     args: {
@@ -20,10 +21,11 @@ export interface MarkdownAPIClientInterface {
       body: models.Markdown,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any>;
+  ): Observable<void>;
 
   /**
    * Render a Markdown document in raw mode
+   * Response generated for [ 200 ] HTTP response code.
    */
   postMarkdownRaw(
     args: {
@@ -35,6 +37,6 @@ export interface MarkdownAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any>;
+  ): Observable<void>;
 
 }

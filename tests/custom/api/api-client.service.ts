@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('APIClient_USE_H
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -41,6 +42,9 @@ export class APIClient implements APIClientInterface {
     };
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getItems(
     args: {
       pageSize: number,
@@ -49,7 +53,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ItemList> {
     const path = `/items`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('pageSize' in args) {
       options.params = options.params.set('pageSize', String(args.pageSize));
@@ -60,15 +67,21 @@ export class APIClient implements APIClientInterface {
     return this.sendRequest<models.ItemList>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getItemModels(
     args: {
       pageSize: number,
       page: number,  // page number
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/itemModels`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('pageSize' in args) {
       options.params = options.params.set('pageSize', String(args.pageSize));
@@ -76,9 +89,12 @@ export class APIClient implements APIClientInterface {
     if ('page' in args) {
       options.params = options.params.set('page', String(args.page));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getPetsId(
     args: {
       id: string,
@@ -86,28 +102,43 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Pet[]> {
     const path = `/pets/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Pet[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   deletePetsId(
     args: {
       id: string,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/pets/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getCustomers(
     requestHttpOptions?: HttpOptions
   ): Observable<models.Customer[] | null> {
     const path = `/customers`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Customer[] | null>('GET', path, options);
   }

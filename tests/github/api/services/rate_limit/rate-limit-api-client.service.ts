@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('RateLimitAPICli
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -45,6 +46,7 @@ export class RateLimitAPIClient implements RateLimitAPIClientInterface {
    * Get your current rate limit status
    * Note: Accessing this endpoint does not count against your rate limit.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getRateLimit(
     args: {
@@ -58,7 +60,10 @@ export class RateLimitAPIClient implements RateLimitAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.RateLimit> {
     const path = `/rate_limit`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));

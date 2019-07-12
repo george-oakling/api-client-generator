@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('DashboardAPICli
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -41,15 +42,24 @@ export class DashboardAPIClient implements DashboardAPIClientInterface {
     };
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getWidgetTypes(
     requestHttpOptions?: HttpOptions
   ): Observable<models.WidgetTypeViewModel[]> {
     const path = `/api/dashboards/widgettypes`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.WidgetTypeViewModel[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   get(
     args: {
       dashboardId: number,
@@ -57,11 +67,17 @@ export class DashboardAPIClient implements DashboardAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.DashboardViewModel> {
     const path = `/api/dashboards/${args.dashboardId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.DashboardViewModel>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getSettings(
     args: {
       dashboardId: number,
@@ -69,22 +85,31 @@ export class DashboardAPIClient implements DashboardAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.RowModel[]> {
     const path = `/api/dashboards/${args.dashboardId}/settings`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.RowModel[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   putSettings(
     args: {
       dashboardId: number,
       rows: any,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/api/dashboards/${args.dashboardId}/settings`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('PUT', path, options, JSON.stringify(args.rows));
+    return this.sendRequest<Object>('PUT', path, options, JSON.stringify(args.rows));
   }
 
   private sendRequest<T>(method: string, path: string, options: HttpOptions, body?: any): Observable<T> {

@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('MarkdownAPIClie
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -43,6 +44,7 @@ export class MarkdownAPIClient implements MarkdownAPIClientInterface {
 
   /**
    * Render an arbitrary Markdown document
+   * Response generated for [ 200 ] HTTP response code.
    */
   postMarkdown(
     args: {
@@ -55,9 +57,12 @@ export class MarkdownAPIClient implements MarkdownAPIClientInterface {
       body: models.Markdown,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/markdown`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -77,11 +82,12 @@ export class MarkdownAPIClient implements MarkdownAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.body));
+    return this.sendRequest<void>('POST', path, options, JSON.stringify(args.body));
   }
 
   /**
    * Render a Markdown document in raw mode
+   * Response generated for [ 200 ] HTTP response code.
    */
   postMarkdownRaw(
     args: {
@@ -93,9 +99,12 @@ export class MarkdownAPIClient implements MarkdownAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/markdown/raw`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -115,7 +124,7 @@ export class MarkdownAPIClient implements MarkdownAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('POST', path, options);
+    return this.sendRequest<void>('POST', path, options);
   }
 
   private sendRequest<T>(method: string, path: string, options: HttpOptions, body?: any): Observable<T> {

@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('EventsAPIClient
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -43,6 +44,7 @@ export class EventsAPIClient implements EventsAPIClientInterface {
 
   /**
    * List public events.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getEvents(
     args: {
@@ -56,7 +58,10 @@ export class EventsAPIClient implements EventsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Events> {
     const path = `/events`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));

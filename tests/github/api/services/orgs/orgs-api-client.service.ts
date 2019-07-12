@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('OrgsAPIClient_U
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -43,6 +44,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
 
   /**
    * Get an Organization.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrg(
     args: {
@@ -57,7 +59,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Organization> {
     const path = `/orgs/${args.org}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -82,6 +87,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
 
   /**
    * Edit an Organization.
+   * Response generated for [ 200 ] HTTP response code.
    */
   patchOrgsOrg(
     args: {
@@ -97,7 +103,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Organization> {
     const path = `/orgs/${args.org}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -122,6 +131,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
 
   /**
    * List public events for an organization.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrgEvents(
     args: {
@@ -136,7 +146,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Events> {
     const path = `/orgs/${args.org}/events`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -163,6 +176,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
    * List issues.
    * List all issues for a given organization for the authenticated user.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrgIssues(
     args: {
@@ -183,7 +197,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Issues> {
     const path = `/orgs/${args.org}/issues`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('filter' in args) {
       options.params = options.params.set('filter', String(args.filter));
@@ -232,6 +249,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
    * will be returned. If the requester is not an owner of the organization the
    * query will be redirected to the public members list.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrgMembers(
     args: {
@@ -246,7 +264,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Users> {
     const path = `/orgs/${args.org}/members`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -274,6 +295,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
    * Removing a user from this list will remove them from all teams and they
    * will no longer have any access to the organization's repositories.
    * 
+   * Response generated for [ 204 ] HTTP response code.
    */
   deleteOrgsOrgMembersUsername(
     args: {
@@ -287,9 +309,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/orgs/${args.org}/members/${args.username}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -309,11 +334,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * Check if a user is, publicly or privately, a member of the organization.
+   * Response generated for [ 204 ] HTTP response code.
    */
   getOrgsOrgMembersUsername(
     args: {
@@ -327,9 +353,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/orgs/${args.org}/members/${args.username}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -349,7 +378,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
@@ -357,6 +386,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
    * Members of an organization can choose to have their membership publicized
    * or not.
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrgPublicMembers(
     args: {
@@ -371,7 +401,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Users> {
     const path = `/orgs/${args.org}/public_members`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -396,6 +429,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
 
   /**
    * Conceal a user's membership.
+   * Response generated for [ 204 ] HTTP response code.
    */
   deleteOrgsOrgPublicMembersUsername(
     args: {
@@ -409,9 +443,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/orgs/${args.org}/public_members/${args.username}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -431,11 +468,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * Check public membership.
+   * Response generated for [ 204 ] HTTP response code.
    */
   getOrgsOrgPublicMembersUsername(
     args: {
@@ -449,9 +487,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/orgs/${args.org}/public_members/${args.username}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -471,11 +512,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<void>('GET', path, options);
   }
 
   /**
    * Publicize a user's membership.
+   * Response generated for [ 204 ] HTTP response code.
    */
   putOrgsOrgPublicMembersUsername(
     args: {
@@ -489,9 +531,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
       xGitHubRequestId?: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/orgs/${args.org}/public_members/${args.username}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -511,11 +556,12 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     if ('xGitHubRequestId' in args) {
       options.headers = options.headers.set('X-GitHub-Request-Id', String(args.xGitHubRequestId));
     }
-    return this.sendRequest<any>('PUT', path, options);
+    return this.sendRequest<void>('PUT', path, options);
   }
 
   /**
    * List repositories for the specified org.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrgRepos(
     args: {
@@ -531,7 +577,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Repos> {
     const path = `/orgs/${args.org}/repos`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('type' in args) {
       options.params = options.params.set('type', String(args.type));
@@ -561,6 +610,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
    * Create a new repository for the authenticated user. OAuth users must supply
    * repo scope.
    * 
+   * Response generated for [ 201 ] HTTP response code.
    */
   postOrgsOrgRepos(
     args: {
@@ -576,7 +626,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Repos> {
     const path = `/orgs/${args.org}/repos`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -601,6 +654,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
 
   /**
    * List teams.
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOrgsOrgTeams(
     args: {
@@ -615,7 +669,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Teams> {
     const path = `/orgs/${args.org}/teams`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));
@@ -642,6 +699,7 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
    * Create team.
    * In order to create a team, the authenticated user must be an owner of organization.
    * 
+   * Response generated for [ 201 ] HTTP response code.
    */
   postOrgsOrgTeams(
     args: {
@@ -657,7 +715,10 @@ export class OrgsAPIClient implements OrgsAPIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Team> {
     const path = `/orgs/${args.org}/teams`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('xGitHubMediaType' in args) {
       options.headers = options.headers.set('X-GitHub-Media-Type', String(args.xGitHubMediaType));

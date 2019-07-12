@@ -15,7 +15,6 @@ import {
   Property,
   Render,
   RenderFileName,
-  ResponseType
 } from './types';
 import {
   BASIC_TS_TYPE_REGEX,
@@ -44,6 +43,7 @@ type ExtendedParameter = (SwaggerParameter) & {
   schema: Schema;
   type: 'string' | 'integer';
   required: boolean;
+  'x-enumNames'?: string[];
 };
 
 interface Definitions {
@@ -95,12 +95,22 @@ function parseMethods({paths, security, parameters, responses = {}}: Swagger, sw
         return supportedMethods.indexOf(methodType.toUpperCase()) !== -1 && // skip unsupported methods
           (!swaggerTag || (op.tags && op.tags.includes(swaggerTag))); // if tag is defined take only paths including this tag
       }).map(([methodType, operation]: [string, Operation]) => {
-          const okResponse: Response | Reference = operation.responses['200'] || operation.responses['201'];
+          // select the lowest success (code 20x) response
+          const successResponseCode =
+            Object.keys(operation.responses).slice().sort().filter(code => code.startsWith('2'))[0]
+            || 'missing';
+
+          const okResponse: Response | Reference = operation.responses[successResponseCode];
 
           const responseType = determineResponseType(
             okResponse && isReference(okResponse)
               ? responses[dereferenceType(okResponse.$ref)]
               : okResponse
+          );
+
+          const transformedParams = transformParameters(
+            [...(pathDef.parameters || []), ...(operation.parameters || [])],
+            parameters || {}
           );
 
           return {
@@ -111,17 +121,19 @@ function parseMethods({paths, security, parameters, responses = {}}: Swagger, sw
               : `${methodType}_${pathName.replace(/[{}]/g, '')}`
             ),
             methodType: methodType.toUpperCase() as MethodType,
-            parameters: transformParameters(
-              [...(pathDef.parameters || []), ...(operation.parameters || [])],
-              parameters || {}
-            ),
+            parameters: transformedParams,
+            formData: transformedParams
+              .filter(({name, isFormParameter}) => name && isFormParameter)
+              .map(({name, camelCaseName}) => ({name:  name!, camelCaseName: camelCaseName || name!})),
             // turn path interpolation `{this}` into string template `${args.this}
             path: pathName.replace(
               /{(.*?)}/g,
               (_: string, ...args: string[]): string => `\${args.${toCamelCase(args[0])}}`),
             responseTypeName: responseType.name,
             response: prefixImportedModels(responseType.type),
-            description: replaceNewLines(operation.description, '$1   * '),
+            // tslint:disable-next-line:max-line-length
+            description: `${replaceNewLines(operation.description, '$1   * ')}${operation.description ? '\n   * ' : ''}Response generated for [ ${successResponseCode} ] HTTP response code.`,
+            .../^(File|Blob)\b/i.test(responseType.name) && {requestResponseType: 'blob' as 'blob'},
           };
         }
       )
@@ -183,7 +195,13 @@ function parseDefinitions(
 
 function defineEnumOrInterface(key: string, definition: Schema | ExtendedParameter): Definition {
   return definition.enum && definition.enum.length !== 0
-    ? defineEnum(definition.enum, key, definition.type === 'integer', definition.description)
+    ? defineEnum(
+      definition.enum,
+      key,
+      definition.type === 'integer',
+      definition.description,
+      (definition as ExtendedParameter)['x-enumNames'],
+    )
     : defineInterface(('schema' in definition ? definition.schema : definition) || {}, key);
 }
 
@@ -192,6 +210,7 @@ function defineEnum(
   definitionKey: string,
   isNumeric: boolean = false,
   enumDesc: string = '',
+  xEnumNames: string[] = [],
 ): Definition {
   const splitDesc = enumDesc.split('\n');
   const descKeys: { [key: string]: string } | null = splitDesc.length > 1
@@ -206,10 +225,10 @@ function defineEnum(
 
   return {
     name: typeName(definitionKey),
-    properties: enumSchema && enumSchema.map((val) => ({
+    properties: enumSchema && enumSchema.map((val, index) => ({
       name: (
         isNumeric
-          ? descKeys ? descKeys[val.toString()] : val.toString()
+          ? descKeys ? descKeys[val.toString()] : xEnumNames[index] || `${val}`
           : val.toString()
       ).replace(/[\W\s]+/, '_'),
       value: val.toString(),
@@ -320,21 +339,25 @@ function defineInterface(schema: Schema, definitionKey: string): Definition {
   };
 }
 
-function determineResponseType(response: Response): ResponseType {
-  if (response == null) { // TODO: check non-200 response codes
-    logWarn('200 or 201 response not specified; `any` will be used');
-    return {name: 'any', type: 'any'};
+function determineResponseType(response: Response): {
+  readonly type: string;
+  readonly name: string;
+} {
+  if (response == null ) {
+    return {name: 'void', type: 'void'};
   }
 
   const {schema} = response;
+
   if (schema == null) {
-    logWarn('200 or 201 response schema not specified; `any` will be used');
-    return {name: 'any', type: 'any'};
+    return {name: 'void', type: 'void'};
   }
 
   const nullable = (schema as Schema & { 'x-nullable'?: boolean })['x-nullable'] || false;
+
   if (schema.type === 'array') {
     const {items} = schema;
+
     if (items == null) {
       logWarn('`items` field not present; `any[]` will be used');
       return {name: 'any', type: 'any[]'};
@@ -347,13 +370,18 @@ function determineResponseType(response: Response): ResponseType {
 
     const name = items.$ref ? dereferenceType(items.$ref) : items.type;
     const type = nullable ? `${typeName(name, true)} | null` : typeName(name, true);
-    return {name, type};
+    return {name: name || 'any', type};
   }
 
   if (schema.$ref != null) {
     const name = dereferenceType(schema.$ref);
     const type = nullable ? `${typeName(name)} | null` : typeName(name);
     return {name, type};
+  }
+
+  if (schema.type != null) {
+    const type = nullable ? `${typeName(schema.type)} | null` : typeName(schema.type);
+    return {name: type, type};
   }
 
   return {name: 'any', type: 'any'};

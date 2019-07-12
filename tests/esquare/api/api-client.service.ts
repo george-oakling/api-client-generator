@@ -13,6 +13,7 @@ export const USE_HTTP_OPTIONS = new InjectionToken<HttpOptions>('APIClient_USE_H
 type APIHttpOptions = HttpOptions & {
   headers: HttpHeaders;
   params: HttpParams;
+  responseType?: 'arraybuffer' | 'blob' | 'text' | 'json';
 };
 
 /**
@@ -41,81 +42,129 @@ export class APIClient implements APIClientInterface {
     };
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   auth(
     args: {
       body: models.AuthForm,  // Structure entity object that needs to be added
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/auth`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.body));
+    return this.sendRequest<Object>('POST', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   authRef(
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/auth/refresh`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options);
+    return this.sendRequest<Object>('POST', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   passwordRestoreRequest(
     args: {
       body: models.RestoreForm,  // Structure entity object that needs to be added
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/restore`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.body));
+    return this.sendRequest<Object>('POST', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   passwordRestoreEmailRequest(
     args: {
       body: models.RestoreRequestForm,  // Structure entity object that needs to be added
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/restore/request`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.body));
+    return this.sendRequest<Object>('POST', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   passwordRestoreCheckRestoreGuid(
     args: {
       restoreGuid: string,  // RestoreGuid for check
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/restore/checkGuid`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.restoreGuid));
+    const formData = new FormData();
+    formData.append('restoreGuid', args.restoreGuid);
+
+    return this.sendRequest<Object>('POST', path, options, formData);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getAclList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.AclItem[]> {
     const path = `/acl`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.AclItem[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getStructureEntitiesList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.Structure[]> {
     const path = `/structure`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Structure[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   addStructureEntity(
     args: {
       body: models.StructureAddParameters,  // Structure entity object that needs to be added
@@ -123,11 +172,17 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Structure> {
     const path = `/structure`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Structure>('POST', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   updateStructureEntity(
     args: {
       structureId: number,  // structure id to update
@@ -136,26 +191,36 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Structure> {
     const path = `/structure/${args.structureId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Structure>('PUT', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   deleteStructureEntity(
     args: {
       structureId: number,  // structure id to delete
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/structure/${args.structureId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hy4z8d)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getReportsList(
     args: {
@@ -166,9 +231,12 @@ export class APIClient implements APIClientInterface {
       order?: models.Order,  // (optional) - asc - desc 
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/report`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('status' in args) {
       options.params = options.params.set('status', String(args.status));
@@ -185,12 +253,13 @@ export class APIClient implements APIClientInterface {
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hywkd5)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getReportDetails(
     args: {
@@ -199,7 +268,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ReportItem[]> {
     const path = `/report/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.ReportItem[]>('GET', path, options);
   }
@@ -207,6 +279,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/i3z8zb)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getReportPreview(
     args: {
@@ -217,9 +290,12 @@ export class APIClient implements APIClientInterface {
       order?: models.Order,  // (optional) - asc - desc 
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/report/preview/${args.templateId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('pageSize' in args) {
       options.params = options.params.set('pageSize', String(args.pageSize));
@@ -233,12 +309,13 @@ export class APIClient implements APIClientInterface {
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/i3ym4j)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getImportHistory(
     args: {
@@ -247,7 +324,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ImportHistoryItem[]> {
     const path = `/report/history/${args.templateId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.ImportHistoryItem[]>('GET', path, options);
   }
@@ -255,6 +335,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/hy521p)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   uploadFile(
     args: {
@@ -262,16 +343,23 @@ export class APIClient implements APIClientInterface {
       file: File,  // file to upload
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<number> {
     const path = `/report/wizard/uploadfile/${args.templateId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.file));
+    const formData = new FormData();
+    formData.append('file', args.file);
+
+    return this.sendRequest<number>('POST', path, options, formData);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hy52hi)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   listTemplateColumns(
     args: {
@@ -280,7 +368,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Column[]> {
     const path = `/report/wizard/${args.templateId}/templateColumns`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Column[]>('GET', path, options);
   }
@@ -288,6 +379,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/hy52zr)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   listReportColumns(
     args: {
@@ -296,7 +388,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Column[]> {
     const path = `/report/wizard/${args.id}/reportColumns`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Column[]>('GET', path, options);
   }
@@ -304,6 +399,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/hy53jt)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   saveColumnsMapping(
     args: {
@@ -313,7 +409,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.Table> {
     const path = `/report/wizard/${args.id}/mapping`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Table>('POST', path, options, JSON.stringify(args.body));
   }
@@ -321,6 +420,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/hy5fct)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getValidationTable(
     args: {
@@ -329,7 +429,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ValidatedTable> {
     const path = `/report/wizard/${args.id}/validationTable`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.ValidatedTable>('GET', path, options);
   }
@@ -337,6 +440,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/hy55ga)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   downloadImportedFile(
     args: {
@@ -344,19 +448,24 @@ export class APIClient implements APIClientInterface {
       all?: boolean,  // (optional) Indicator of downloading data(all or errors only)
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<File> {
     const path = `/report/wizard/${args.id}/downloadImported`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+      responseType: 'blob',
+    };
 
     if ('all' in args) {
       options.params = options.params.set('all', String(args.all));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<File>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hy57nj)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   importConfirmation(
     args: {
@@ -365,7 +474,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.ImportResponse> {
     const path = `/report/wizard/${args.id}/import`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.ImportResponse>('POST', path, options);
   }
@@ -373,54 +485,69 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/hy5a54)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   downloadImportOriginalFile(
     args: {
       id: number,  // Id of current import
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<File> {
     const path = `/report/wizard/${args.id}/downloadOriginal`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+      responseType: 'blob',
+    };
 
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<File>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hy5ae7)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   downloadImportSkippedFile(
     args: {
       id: number,  // Id of current import
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<File> {
     const path = `/report/wizard/${args.id}/downloadSkipped`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+      responseType: 'blob',
+    };
 
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<File>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hy5aqq)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   cancelImport(
     args: {
       id: number,  // Id of current import
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/report/wizard/${args.id}/cancelImport`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options);
+    return this.sendRequest<void>('POST', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/hy5bi6)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   overrideImport(
     args: {
@@ -429,16 +556,24 @@ export class APIClient implements APIClientInterface {
       file: File,  // file to upload
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/report/wizard/${args.id}/override`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.description), JSON.stringify(args.file));
+    const formData = new FormData();
+    formData.append('description', args.description);
+    formData.append('file', args.file);
+
+    return this.sendRequest<void>('POST', path, options, formData);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/i4052r)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   geImportStats(
     args: {
@@ -447,7 +582,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.TotalImportStats> {
     const path = `/report/ministry/statistic`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('period' in args) {
       options.params = options.params.set('period', String(args.period));
@@ -458,6 +596,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/i40s18)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getIssuesList(
     args: {
@@ -469,9 +608,12 @@ export class APIClient implements APIClientInterface {
       order?: models.Order,  // (optional) - asc - desc 
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/report/ministry/issues`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('period' in args) {
       options.params = options.params.set('period', String(args.period));
@@ -491,12 +633,13 @@ export class APIClient implements APIClientInterface {
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/i4byyx)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getStatusesList(
     args: {
@@ -508,9 +651,12 @@ export class APIClient implements APIClientInterface {
       order?: models.Order,  // (optional) - asc - desc 
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/report/ministry/statuses`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('period' in args) {
       options.params = options.params.set('period', String(args.period));
@@ -530,9 +676,12 @@ export class APIClient implements APIClientInterface {
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getUsersList(
     args: {
       period?: models.Period,  // (optional) - 1 Year - 2 Month - 3 Week 
@@ -545,9 +694,12 @@ export class APIClient implements APIClientInterface {
       unassignedFromRole?: number,  // (optional) role id | [Screenshot from design](http://prntscr.com/ib9z16)
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/users`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('period' in args) {
       options.params = options.params.set('period', String(args.period));
@@ -573,9 +725,12 @@ export class APIClient implements APIClientInterface {
     if ('unassignedFromRole' in args) {
       options.params = options.params.set('unassignedFromRole', String(args.unassignedFromRole));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   createUser(
     args: {
       body: models.UserDetails,  // User entity object that needs to be added
@@ -583,20 +738,32 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.UserDetails> {
     const path = `/users`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.UserDetails>('POST', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getAclStructure(
     requestHttpOptions?: HttpOptions
   ): Observable<models.Acl[]> {
     const path = `/users/acl`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.Acl[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getUserDetails(
     args: {
       id: number,
@@ -604,11 +771,17 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.UserDetails[]> {
     const path = `/users/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.UserDetails[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   updateUser(
     args: {
       id: number,
@@ -617,36 +790,52 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.UserDetails> {
     const path = `/users/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.UserDetails>('PUT', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   deleteUser(
     args: {
       id: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/i93q0s)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getRolesList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.RoleListItem[]> {
     const path = `/users/roles`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.RoleListItem[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   createRole(
     args: {
       body: any,  // Role entity object that needs to be added
@@ -654,7 +843,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.RoleDetailsItem> {
     const path = `/users/roles`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.RoleDetailsItem>('POST', path, options, JSON.stringify(args.body));
   }
@@ -662,16 +854,23 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/i947a3)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.PrivilegeTreeItem[]> {
     const path = `/users/privileges`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.PrivilegeTreeItem[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getRoleDetails(
     args: {
       id: number,
@@ -679,11 +878,17 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.RoleDetailsItem[]> {
     const path = `/users/roles/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.RoleDetailsItem[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   updateRole(
     args: {
       id: number,
@@ -692,51 +897,71 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.RoleDetailsItem> {
     const path = `/users/roles/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.RoleDetailsItem>('PUT', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   deleteRole(
     args: {
       id: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/users/roles/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('DELETE', path, options);
+    return this.sendRequest<void>('DELETE', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/iba7xr)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getNewNotificationsList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.NotificationListItem[]> {
     const path = `/notifications/new`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.NotificationListItem[]>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   markViewedNotifications(
     args: {
       body?: any,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/notifications/markAsViewed`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('PUT', path, options, JSON.stringify(args.body));
+    return this.sendRequest<void>('PUT', path, options, JSON.stringify(args.body));
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/iba8tq)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getNotificationsList(
     args: {
@@ -746,9 +971,12 @@ export class APIClient implements APIClientInterface {
       order?: models.Order,  // (optional) - asc - desc 
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/notifications/all`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('pageSize' in args) {
       options.params = options.params.set('pageSize', String(args.pageSize));
@@ -762,19 +990,23 @@ export class APIClient implements APIClientInterface {
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/ibac47) |
    * [Screenshot from design](http://prntscr.com/ibacgu)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getModulesList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.NotificationModule[]> {
     const path = `/notifications/modules`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.NotificationModule[]>('GET', path, options);
   }
@@ -782,12 +1014,16 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/ibad9m)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getTriggersList(
     requestHttpOptions?: HttpOptions
   ): Observable<models.NotificationTrigger[]> {
     const path = `/notifications/triggers`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.NotificationTrigger[]>('GET', path, options);
   }
@@ -795,6 +1031,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/iba8tq)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getModuleNotificationsList(
     args: {
@@ -805,9 +1042,12 @@ export class APIClient implements APIClientInterface {
       order?: models.Order,  // (optional) - asc - desc 
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<Object> {
     const path = `/notifications/modules/${args.moduleId}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     if ('pageSize' in args) {
       options.params = options.params.set('pageSize', String(args.pageSize));
@@ -821,33 +1061,48 @@ export class APIClient implements APIClientInterface {
     if ('order' in args) {
       options.params = options.params.set('order', String(args.order));
     }
-    return this.sendRequest<any>('GET', path, options);
+    return this.sendRequest<Object>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   enableNotification(
     args: {
       id: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/notifications/enable/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('PUT', path, options);
+    return this.sendRequest<void>('PUT', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   disableNotification(
     args: {
       id: number,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/notifications/disable/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('PUT', path, options);
+    return this.sendRequest<void>('PUT', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   getNotification(
     args: {
       id: number,
@@ -855,45 +1110,64 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.NotificationEditableListItem> {
     const path = `/notifications/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.NotificationEditableListItem>('GET', path, options);
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   updateNotification(
     args: {
       id: number,
       body?: models.NotificationEditable,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<void> {
     const path = `/notifications/${args.id}`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('PUT', path, options, JSON.stringify(args.body));
+    return this.sendRequest<void>('PUT', path, options, JSON.stringify(args.body));
   }
 
+  /**
+   * Response generated for [ 200 ] HTTP response code.
+   */
   createNotification(
     args: {
       body?: models.NotificationEditable,
     },
     requestHttpOptions?: HttpOptions
-  ): Observable<any> {
+  ): Observable<number> {
     const path = `/notifications`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
-    return this.sendRequest<any>('POST', path, options, JSON.stringify(args.body));
+    return this.sendRequest<number>('POST', path, options, JSON.stringify(args.body));
   }
 
   /**
    * [Screenshot from design](http://prntscr.com/ijzt2b)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getPassVerificationPolicies(
     requestHttpOptions?: HttpOptions
   ): Observable<models.PasswordVerificationPolicies> {
     const path = `/security-policy/password-verification`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.PasswordVerificationPolicies>('GET', path, options);
   }
@@ -901,6 +1175,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/ijzt2b)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   udatePassVerificationPolicies(
     args: {
@@ -909,7 +1184,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.PasswordVerificationPolicies> {
     const path = `/security-policy/password-verification`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.PasswordVerificationPolicies>('PUT', path, options, JSON.stringify(args.body));
   }
@@ -917,12 +1195,16 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/ijzuv3)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getPassCreationPolicies(
     requestHttpOptions?: HttpOptions
   ): Observable<models.PasswordCreationPolicies> {
     const path = `/security-policy/password-creation`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.PasswordCreationPolicies>('GET', path, options);
   }
@@ -930,6 +1212,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/ijzuv3)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   udatePassCreationPolicies(
     args: {
@@ -938,7 +1221,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.PasswordCreationPolicies> {
     const path = `/security-policy/password-creation`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.PasswordCreationPolicies>('PUT', path, options, JSON.stringify(args.body));
   }
@@ -946,12 +1232,16 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/ijzvo3)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   getOtherSecuritySettings(
     requestHttpOptions?: HttpOptions
   ): Observable<models.OtherSecuritySettings> {
     const path = `/security-policy/other-settings`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.OtherSecuritySettings>('GET', path, options);
   }
@@ -959,6 +1249,7 @@ export class APIClient implements APIClientInterface {
   /**
    * [Screenshot from design](http://prntscr.com/ijzvo3)
    * 
+   * Response generated for [ 200 ] HTTP response code.
    */
   udateOtherSecuritySettings(
     args: {
@@ -967,7 +1258,10 @@ export class APIClient implements APIClientInterface {
     requestHttpOptions?: HttpOptions
   ): Observable<models.OtherSecuritySettings> {
     const path = `/security-policy/other-settings`;
-    const options: APIHttpOptions = {...this.options, ...requestHttpOptions};
+    const options: APIHttpOptions = {
+      ...this.options,
+      ...requestHttpOptions,
+    };
 
     return this.sendRequest<models.OtherSecuritySettings>('PUT', path, options, JSON.stringify(args.body));
   }
